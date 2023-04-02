@@ -2,6 +2,7 @@ package com.topic3.android.reddit.appdrawer
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.MaterialTheme.colors
@@ -15,6 +16,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -227,7 +229,50 @@ private fun ScreenNavigationButton(
  */
 @Composable
 private fun AppDrawerFooter(modifier: Modifier = Modifier) {
-  //TODO add your code here
+  ConstraintLayout(
+    modifier = modifier
+      .fillMaxSize()
+      .padding(
+        start = 16.dp,
+        bottom = 16.dp,
+        end = 16.dp
+      )
+  ) {
+    val color = MaterialTheme.colors
+    val (settingImage, settingText, darkModeButton)=createRefs()
+    Icon(
+      modifier = modifier.constrainAs(settingImage){
+        start.linkTo(parent.start)
+        bottom.linkTo(parent.bottom)
+      },
+      imageVector = Icons.Default.Settings,
+      contentDescription = stringResource(id = R.string.settings),
+    tint = color.primaryVariant
+    )
+    Text(
+      fontSize = 10.sp,
+      text = stringResource(R.string.settings),
+      style = MaterialTheme.typography.body2,
+      color = colors.primaryVariant,
+      modifier= modifier
+        .padding(start = 16.dp)
+        .constrainAs(settingText) {
+          start.linkTo(settingImage.end)
+          centerVerticallyTo(settingImage)
+        }
+    )
+    Icon(
+      imageVector = ImageVector.vectorResource(id = R.drawable.ic_moon),
+      contentDescription = stringResource(id = R.string.change_theme),
+      modifier = modifier
+        .clickable(onClick = { changeTheme() })
+        .constrainAs(darkModeButton){
+          end.linkTo(parent.end)
+          bottom.linkTo(settingImage.bottom)
+        },
+      tint = colors.primaryVariant
+    )
+  }
 }
 
 private fun changeTheme() {
